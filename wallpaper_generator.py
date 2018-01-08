@@ -30,7 +30,6 @@ def crop_image(img, t_size):
 		crop_y = c_y - temp_y
 		result = img.crop((0, crop_y/2, c_x, crop_y/2+temp_y))
 		result = result.resize(t_size)
-		# result = img.resize(t_size)
 		print("case2")
 		return result
 	else:
