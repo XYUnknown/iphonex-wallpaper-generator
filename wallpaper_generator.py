@@ -18,17 +18,32 @@ def crop_image(img, t_size):
 		return result
 	# curr_x >= target_x, curr_y < target_y
 	elif (curr_ratio > ratio):
+		user_command = input("please choose LEFT, CENTRE or RIGHT:\n")
+		user_command = user_command.upper()
+		print(user_command)
 		temp_x = c_y * ratio
 		crop_x = c_x - temp_x
-		result = img.crop((crop_x/2, 0, crop_x/2+temp_x, c_y))
+		if user_command == "LEFT":
+			result = img.crop((0, 0, temp_x, c_y))
+		elif user_command == "RIGHT":
+			result = img.crop((crop_x, 0, c_x, c_y))
+		else: # default crop centre
+			result = img.crop((crop_x/2, 0, crop_x/2+temp_x, c_y))
 		result = result.resize(t_size)
 		print("case1")
 		return result
 	# curr_x < target_x, curr_y >= target_y
 	elif (curr_ratio < ratio):
+		user_command = input("please choose UP, CENTRE or DOWN:\n")
+		user_command = user_command.upper()
 		temp_y = c_x / ratio
 		crop_y = c_y - temp_y
-		result = img.crop((0, crop_y/2, c_x, crop_y/2+temp_y))
+		if user_command == "UP":
+			result = img.crop((0, 0, c_x, temp_y))
+		elif user_command == "DOWN":
+			result = img.crop((0, crop_y, c_x, c_y))
+		else: # default crop centre
+			result = img.crop((0, crop_y/2, c_x, crop_y/2+temp_y))
 		result = result.resize(t_size)
 		print("case2")
 		return result
@@ -54,7 +69,13 @@ def run():
 		return ""
 	# composite image and mask, save the final image
 	result_img = Image.alpha_composite(cropped_img, mask)
-	result_img.save("new_wallpaper00.png")
+	file_name = input("Please enter a name for your new wallpaper: \n")
+	file_name = file_name.strip()
+	if len(file_name) == 0:
+		file_name = "default.png"
+	else:
+		file_name = file_name + ".png"
+	result_img.save(file_name)
 
 if __name__ == "__main__":
 	run()
